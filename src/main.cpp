@@ -73,7 +73,7 @@ int main() {
     }
 
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-    stbi_set_flip_vertically_on_load(true);
+    //stbi_set_flip_vertically_on_load(true);
 
     // configure global opengl state
     // -----------------------------
@@ -141,10 +141,10 @@ int main() {
     };
 
     glm::vec3 pointLightPositions[] = {
-            glm::vec3( 1.0f,  4.0f,  1.0f),
-            glm::vec3( 1.0f, 4.0f, -1.0f),
-            glm::vec3( -1.0f,  4.0f, 1.0f),
-            glm::vec3( -1.0f,  4.0f, -1.0f)
+            glm::vec3( 3.0f,  4.0f,  1.0f),
+            glm::vec3( 3.0f, 4.0f, -1.0f),
+            glm::vec3( -3.0f,  4.0f, 1.0f),
+            glm::vec3( -3.0f,  4.0f, -1.0f)
     };
 
     unsigned int VBO, cubeVAO;
@@ -175,7 +175,7 @@ int main() {
     unsigned int diffuseMap = loadTexture(FileSystem::getPath("resources/textures/papir.jpg").c_str());
     unsigned int specularMap = loadTexture(FileSystem::getPath("resources/textures/papir_sivo.jpg").c_str());
 
-    Model ourModel("resources/objects/backpack/backpack.obj");
+    Model ourModel("resources/objects/tree/tree.obj");
 
     lightingShader.use();
     lightingShader.setInt("material.diffuse", 0);
@@ -329,21 +329,23 @@ int main() {
 
         projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         view = camera.GetViewMatrix();
-        view = glm::scale(view, glm::vec3(1.0f, 1.0f, 1.0f));
+        view = glm::translate(view,glm::vec3(0.0f,-1.0f,0.0f));
+        view =glm::rotate(view,glm::radians(-90.0f),glm::vec3(1.0f, 0.0f, 0.0f));
+        view = glm::scale(view, glm::vec3(0.05f, 0.05f, 0.05f));
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
 
         // render the loaded model
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+      //  model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));	// it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
 
-        model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-        view          = glm::mat4(1.0f);
-        projection    = glm::mat4(1.0f);
-        view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-        projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+    //    model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+     //   view          = glm::mat4(1.0f);
+      //  projection    = glm::mat4(1.0f);
+     //   view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+     //   projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         ourModel.Draw(ourShader);
 
 
