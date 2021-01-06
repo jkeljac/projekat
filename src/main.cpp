@@ -12,6 +12,7 @@
 #include <learnopengl/model.h>
 
 #include <iostream>
+#include <string>
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
@@ -86,7 +87,6 @@ int main() {
     Shader ourShader("resources/shaders/2.model_lighting.vs", "resources/shaders/2.model_lighting.fs");
     Shader lightingShader("resources/shaders/multiple_lights.vs", "resources/shaders/multiple_lights.fs");
     Shader lightCubeShader("resources/shaders/light_cube.vs","resources/shaders/light_cube.fs");
-
     // load models
     // -----------
 
@@ -137,7 +137,19 @@ int main() {
 
     glm::vec3 cubePositions[] = {
             glm::vec3( -3.0f,  -1.0f,  0.0f),
-            glm::vec3( 3.0f,  -1.0f,  0.0f)
+            glm::vec3( 2.4f,  -1.0f,  -0.5f),
+            glm::vec3(-1.5f,-1.0f,0.5f),
+            glm::vec3(-1.0f,-1.0f,-1.0f),
+            glm::vec3(-0.6f,-1.0f,2.5f),
+            glm::vec3( -2.2f,  -1.0f,  1.8f),
+            glm::vec3( 0.8f,  -1.0f,  2.2f),
+            glm::vec3(1.0f,-1.0f,-1.5f),
+            glm::vec3(1.7f,-1.0f,1.0f),
+            glm::vec3(1.7f,-0.35f,1.0f),
+            glm::vec3( -3.0f,  -0.35f,  0.0f),
+            glm::vec3( -0.6f,  -0.35f,  2.5f),
+            glm::vec3( 0.8f,  -0.35,  2.2f),
+            glm::vec3( -1.0f,  -0.35f,  -1.0f)
     };
 
     glm::vec3 pointLightPositions[] = {
@@ -172,16 +184,25 @@ int main() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    unsigned int diffuseMap = loadTexture(FileSystem::getPath("resources/textures/papir.jpg").c_str());
-    unsigned int specularMap = loadTexture(FileSystem::getPath("resources/textures/papir_sivo.jpg").c_str());
+
+    unsigned int diffuseMap = loadTexture(FileSystem::getPath("resources/textures/ng2.jpeg").c_str());
+    unsigned int specularMap = loadTexture(FileSystem::getPath("resources/textures/ng2.jpeg").c_str());
+    unsigned int ng2 = loadTexture(FileSystem::getPath("resources/textures/c1.jpg").c_str());
+    unsigned int ng3 = loadTexture(FileSystem::getPath("resources/textures/c2.jpg").c_str());
+    unsigned int ng4 = loadTexture(FileSystem::getPath("resources/textures/c3.png").c_str());
+
 
     Model ourModel("resources/objects/tree/tree.obj");
 
     lightingShader.use();
     lightingShader.setInt("material.diffuse", 0);
     lightingShader.setInt("material.specular", 1);
+    lightingShader.setInt("material.diffuse",2);
+    lightingShader.setInt("material.diffuse",3);
+    lightingShader.setInt("material.diffuse",4);
 
- //   ourModel.SetShaderTextureNamePrefix("material.");
+    //ourModel.SetShaderTextureNamePrefix("material.");
+
 
     /*
     PointLight& pointLight = programState->pointLight;
@@ -216,14 +237,13 @@ int main() {
 
         // render
         // ------
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClearColor(0.5f, 0.0f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // be sure to activate shader when setting uniforms/drawing objects
         lightingShader.use();
         lightingShader.setVec3("viewPos", camera.Position);
         lightingShader.setFloat("material.shininess", 32.0f);
-
         /*
            Here we set all the uniforms for the 5/6 types of lights we have. We have to set them manually and index
            the proper PointLight struct in the array to set each uniform variable. This can be done more code-friendly
@@ -297,21 +317,74 @@ int main() {
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, specularMap);
 
+        glActiveTexture(GL_TEXTURE2);
+        //glBindTexture(GL_TEXTURE_2D, ng2);
+
+        glActiveTexture(GL_TEXTURE3);
+        //glBindTexture(GL_TEXTURE_2D, ng3);
+
+        glActiveTexture(GL_TEXTURE4);
+        //glBindTexture(GL_TEXTURE_2D, ng4);
+
         // render containers
         glBindVertexArray(cubeVAO);
-        for (unsigned int i = 0; i < 2; i++) {
+        for (unsigned int i = 0; i < 9; i++) {
             // calculate the model matrix for each object and pass it to shader before drawing
+            int n = i%3+2;
+            glActiveTexture(GL_TEXTURE + n);
+            std::string name = "ng";
+            name.append(to_string(n));
+
+            if(name == "ng2") {
+                glBindTexture(GL_TEXTURE_2D,ng2);
+            }
+            if(name == "ng3") {
+                glBindTexture(GL_TEXTURE_2D,ng3);
+            }
+
+            if(name == "ng4") {
+                glBindTexture(GL_TEXTURE_2D, ng4);
+            }
+
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i]);
-            //  float angle = 20.0f * i;
+              float angle = 20.0f * i;
             model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+            model = glm::rotate(model,angle,glm::vec3(0.0f,1.0f,0.0f));
             lightingShader.setMat4("model", model);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
+
+        for (unsigned int i = 9; i < 15; i++) {
+            // calculate the model matrix for each object and pass it to shader before drawing
+            int n = i%3+2;
+            glActiveTexture(GL_TEXTURE + n);
+            std::string name = "ng";
+            name.append(to_string(n));
+
+            if(name == "ng2") {
+                glBindTexture(GL_TEXTURE_2D,ng2);
+            }
+            if(name == "ng3") {
+                glBindTexture(GL_TEXTURE_2D,ng3);
+            }
+            if(name == "ng4") {
+                glBindTexture(GL_TEXTURE_2D, ng4);
+            }
+
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, cubePositions[i]);
+            float angle = 20.0f * i;
+            model = glm::scale(model, glm::vec3(0.5, 0.3, 0.5));
+            model = glm::rotate(model,angle,glm::vec3(0.0f,1.0f,0.0f));
+            lightingShader.setMat4("model", model);
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
         // also draw the lamp object(s)
-       lightCubeShader.use();
+        lightCubeShader.use();
         lightCubeShader.setMat4("projection", projection);
         lightCubeShader.setMat4("view", view);
 
