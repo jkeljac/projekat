@@ -71,14 +71,14 @@ vec3 CalcPointLight(PointLight light,vec3 normal, vec3 fragPos,vec3 viewDir){
         float diff = max(dot(normal, lightDir), 0.0);
         // specular shading
         vec3 reflectDir = reflect(-lightDir, normal);
-        float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0f);
+        float spec = pow(max(dot(viewDir, reflectDir), 0.0), 80.0f);
         // attenuation
         float distance = length(light.position - fragPos);
         float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
         // combine results
-        vec3 ambient = light.ambient * vec3(texture(ng_texture, TexCoords));
-        vec3 diffuse = light.diffuse * diff * vec3(texture(ng_texture, TexCoords));
-        vec3 specular = light.specular * spec * vec3(texture(ng_texture, TexCoords));
+        vec3 ambient = light.ambient * texture(ng_texture, TexCoords).rgb;
+        vec3 diffuse = light.diffuse * diff * texture(ng_texture, TexCoords).rgb;
+        vec3 specular = light.specular * spec * texture(ng_texture, TexCoords).rgb;
         ambient *= attenuation;
         diffuse *= attenuation;
         specular *= attenuation;

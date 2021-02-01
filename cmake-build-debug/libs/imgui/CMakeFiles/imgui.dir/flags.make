@@ -6,5 +6,5 @@ CXX_FLAGS = -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -O3 -g   -s
 
 CXX_DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
 
-CXX_INCLUDES = -I/home/jelena/Desktop/FINAL/projekat/libs/imgui/include -I/home/jelena/Desktop/FINAL/projekat/libs/glad/include 
+CXX_INCLUDES = -I/home/caca/Desktop/Proj-Final/projekat/libs/imgui/include -I/home/caca/Desktop/Proj-Final/projekat/libs/glad/include 
 

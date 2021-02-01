@@ -1,4 +1,4 @@
-# Install script for directory: /home/jelena/Desktop/FINAL/projekat/libs/imgui
+# Install script for directory: /home/caca/Desktop/Proj-Final/projekat/libs/imgui
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
