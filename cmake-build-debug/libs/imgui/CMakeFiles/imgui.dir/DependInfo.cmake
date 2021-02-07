@@ -4,13 +4,13 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/caca/Desktop/Proj-Final/projekat/libs/imgui/src/imgui.cpp" "/home/caca/Desktop/Proj-Final/projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir/src/imgui.cpp.o"
-  "/home/caca/Desktop/Proj-Final/projekat/libs/imgui/src/imgui_demo.cpp" "/home/caca/Desktop/Proj-Final/projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir/src/imgui_demo.cpp.o"
-  "/home/caca/Desktop/Proj-Final/projekat/libs/imgui/src/imgui_draw.cpp" "/home/caca/Desktop/Proj-Final/projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir/src/imgui_draw.cpp.o"
-  "/home/caca/Desktop/Proj-Final/projekat/libs/imgui/src/imgui_impl_glfw.cpp" "/home/caca/Desktop/Proj-Final/projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir/src/imgui_impl_glfw.cpp.o"
-  "/home/caca/Desktop/Proj-Final/projekat/libs/imgui/src/imgui_impl_opengl3.cpp" "/home/caca/Desktop/Proj-Final/projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir/src/imgui_impl_opengl3.cpp.o"
-  "/home/caca/Desktop/Proj-Final/projekat/libs/imgui/src/imgui_tables.cpp" "/home/caca/Desktop/Proj-Final/projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir/src/imgui_tables.cpp.o"
-  "/home/caca/Desktop/Proj-Final/projekat/libs/imgui/src/imgui_widgets.cpp" "/home/caca/Desktop/Proj-Final/projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir/src/imgui_widgets.cpp.o"
+  "/home/jelena/Desktop/FINAL/projekat/libs/imgui/src/imgui.cpp" "/home/jelena/Desktop/FINAL/projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir/src/imgui.cpp.o"
+  "/home/jelena/Desktop/FINAL/projekat/libs/imgui/src/imgui_demo.cpp" "/home/jelena/Desktop/FINAL/projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir/src/imgui_demo.cpp.o"
+  "/home/jelena/Desktop/FINAL/projekat/libs/imgui/src/imgui_draw.cpp" "/home/jelena/Desktop/FINAL/projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir/src/imgui_draw.cpp.o"
+  "/home/jelena/Desktop/FINAL/projekat/libs/imgui/src/imgui_impl_glfw.cpp" "/home/jelena/Desktop/FINAL/projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir/src/imgui_impl_glfw.cpp.o"
+  "/home/jelena/Desktop/FINAL/projekat/libs/imgui/src/imgui_impl_opengl3.cpp" "/home/jelena/Desktop/FINAL/projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir/src/imgui_impl_opengl3.cpp.o"
+  "/home/jelena/Desktop/FINAL/projekat/libs/imgui/src/imgui_tables.cpp" "/home/jelena/Desktop/FINAL/projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir/src/imgui_tables.cpp.o"
+  "/home/jelena/Desktop/FINAL/projekat/libs/imgui/src/imgui_widgets.cpp" "/home/jelena/Desktop/FINAL/projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir/src/imgui_widgets.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -27,7 +27,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/caca/Desktop/Proj-Final/projekat/cmake-build-debug/libs/glad/CMakeFiles/glad.dir/DependInfo.cmake"
+  "/home/jelena/Desktop/FINAL/projekat/cmake-build-debug/libs/glad/CMakeFiles/glad.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

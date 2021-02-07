@@ -37,6 +37,7 @@ struct DirLight {
     vec3 diffuse;
     vec3 specular;
 };
+    #define NR_SPOT_LIGHTS 2
 
    in vec3 aColor;
    in vec2 TexCoords;
@@ -46,7 +47,7 @@ struct DirLight {
  //  uniform sampler2D texture1;
    uniform sampler2D floor_texture;
    uniform vec3 viewPos;
-   uniform SpotLight spotLight;
+   uniform SpotLight spotLights[NR_SPOT_LIGHTS];
    uniform DirLight dirLight;
    uniform PointLight pointLight;
 
@@ -124,7 +125,8 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
                 // phase 1: directional lighting
                 // phase 2: point lights
 
-        vec3 pom =CalcSpotLight(spotLight,normal,FragPos,viewDir)*spotLight.ind;
+        vec3 pom =CalcSpotLight(spotLights[0],normal,FragPos,viewDir)*spotLights[0].ind;
+          pom+=CalcSpotLight(spotLights[1],normal,FragPos,viewDir)*spotLights[1].ind;
         vec3 result = CalcDirLight(dirLight,normal,viewDir);
         result+=CalcPointLight(pointLight,normal,FragPos,viewDir)+pom;
              // phase 3: spot light

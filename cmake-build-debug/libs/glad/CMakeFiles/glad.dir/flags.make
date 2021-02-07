@@ -6,5 +6,5 @@ C_FLAGS = -g
 
 C_DEFINES = 
 
-C_INCLUDES = -I/home/caca/Desktop/Proj-Final/projekat/libs/glad/include 
+C_INCLUDES = -I/home/jelena/Desktop/FINAL/projekat/libs/glad/include 
 

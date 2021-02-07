@@ -51,9 +51,12 @@ public:
        switch (direction) {
            case FORWARD: {
               Position += Front * velocity;
+              if (Position.y<0.0f)
+                  Position.y=0.0f;
            }break;
            case BACKWARD: {
                 Position -= Front * velocity;
+
            }break;
            case LEFT: {
                 Position -= Right * velocity;
