@@ -498,8 +498,8 @@ int main()
         ourShader.setFloat("spotLights[0].outerCutOff",spotlight.outerCutOff);
         ourShader.setFloat("spotLights[0].ind",spotlight.ind);
 
-        ourShader.setVec3("spotLights[1].position",glm::vec3(6.0f,12.0f,-2.0f));
-        ourShader.setVec3("spotLights[1].direction", glm::vec3(1.8,-6.0,0.0));
+        ourShader.setVec3("spotLights[1].position",glm::vec3(4.0f,12.0f,-2.0f));
+        ourShader.setVec3("spotLights[1].direction", glm::vec3(3.8,-6.0,0.0));
         ourShader.setVec3("spotLights[1].ambient",glm::vec3(0.2,0.2,0.2));
         ourShader.setVec3("spotLights[1].diffuse",glm::vec3(0.2,0.5,0.7));
         ourShader.setVec3("spotLights[1].specular",glm::vec3(0.7,0.7,0.7));
@@ -628,8 +628,8 @@ int main()
         roomShader.setFloat("spotLights[0].outerCutOff", spotlight.outerCutOff);
         roomShader.setFloat("spotLights[0].ind",spotlight.ind);
 
-        roomShader.setVec3("spotLights[1].position",glm::vec3(6.0f,12.0f,-2.0f));
-        roomShader.setVec3("spotLights[1].direction", glm::vec3(1.8,-6.0,0.0) );
+        roomShader.setVec3("spotLights[1].position",glm::vec3(4.0f,12.0f,-2.0f));
+        roomShader.setVec3("spotLights[1].direction", glm::vec3(3.8,-6.0,0.0) );
         roomShader.setVec3("spotLights[1].ambient", glm::vec3(0.2,0.2,0.2));
         roomShader.setVec3("spotLights[1].diffuse",glm::vec3(0.2,0.5,0.7));
         roomShader.setVec3("spotLights[1].specular", glm::vec3(0.7,0.7,0.7));
@@ -843,7 +843,7 @@ int main()
         model = glm::rotate(model,glm::radians(45.0f),glm::vec3(0.0,1.0,0.0));
         model = glm::scale(model, glm::vec3(0.4f)); // Make it a smaller cube
         lightCube.setMat4("model", model);
-        lightCube.setVec3("color", glm::vec3(0.2f*sin(glfwGetTime()*5.0f), 0.5f*sin(glfwGetTime()*2.0f), 0.2f));
+        lightCube.setVec3("color", glm::vec3(0.2f*sin(glfwGetTime()*5.0f), 0.5f*sin(glfwGetTime()*2.0f), 0.2f)*ind);
         glBindVertexArray(cubeVAO);
         glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
 

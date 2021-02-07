@@ -126,7 +126,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
                 // phase 2: point lights
 
         vec3 pom =CalcSpotLight(spotLights[0],normal,FragPos,viewDir)*spotLights[0].ind;
-          pom+=CalcSpotLight(spotLights[1],normal,FragPos,viewDir)*spotLights[1].ind;
+          pom+=CalcSpotLight(spotLights[1],normal,FragPos,viewDir);
         vec3 result = CalcDirLight(dirLight,normal,viewDir);
         result+=CalcPointLight(pointLight,normal,FragPos,viewDir)+pom;
              // phase 3: spot light
