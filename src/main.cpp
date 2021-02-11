@@ -34,7 +34,6 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-int smer=1;
 float ind=1.0f;
 
 struct SpotLight {
@@ -114,18 +113,11 @@ int main()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glm::vec3 pointLightColors[] = {
-            glm::vec3(0.5f, 0.5f, 0.6f),
-            glm::vec3(0.3f, 0.3f, 0.7f),
-            glm::vec3(0.0f, 0.0f, 0.3f),
-            glm::vec3(0.4f, 0.4f, 0.4f)
-    };
+    glm::vec3 pointLightColor = glm::vec3(0.5f, 0.5f, 0.6f);
 
     PointLight pointLight;
     pointLight.position = lightPos;
-    pointLight.ambient = glm::vec3(pointLightColors[0].x * 1.0,  pointLightColors[0].y * 1.0,  pointLightColors[0].z * 1.0);
-   // pointLight.diffuse = glm::vec3( pointLightColors[0].x*1.0 ,  pointLightColors[0].y*1.0,  pointLightColors[0].z*1.0);
-   // pointLight.specular = glm::vec3( pointLightColors[0].x*1.0,  pointLightColors[0].y*1.0,  pointLightColors[0].z*1.0);
+    pointLight.ambient = glm::vec3(pointLightColor.x * 1.0,  pointLightColor.y * 1.0,  pointLightColor.z * 1.0);
     pointLight.diffuse=glm::vec3(1.0f,1.0f,1.0f);
     pointLight.specular=glm::vec3(1.0f,1.0f,1.0f);
     pointLight.constant = 1.0f;
@@ -325,14 +317,12 @@ int main()
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-
     unsigned int skyboxVAO, skyboxVBO;
     glGenVertexArrays(1, &skyboxVAO);
     glGenBuffers(1, &skyboxVBO);
     glBindVertexArray(skyboxVAO);
     glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
-
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
@@ -350,7 +340,6 @@ int main()
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(9 * sizeof(float)));
     glEnableVertexAttribArray(3);
-
 
     unsigned int cubeVAO, cubeVBO,EBO;
     glGenVertexArrays(1, &cubeVAO);
@@ -374,9 +363,7 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-
     glBindVertexArray(0);
-
 
     unsigned int ng1 = loadTexture(FileSystem::getPath("resources/textures/c1.jpg").c_str());
     unsigned int ng2 = loadTexture(FileSystem::getPath("resources/textures/c2.jpg").c_str());
@@ -389,7 +376,6 @@ int main()
     unsigned int c1spec = loadTexture(FileSystem::getPath("resources/textures/c1s.jpg").c_str());
     unsigned int c2spec = loadTexture(FileSystem::getPath("resources/textures/c2s.jpg").c_str());
     unsigned int c3spec = loadTexture(FileSystem::getPath("resources/textures/c3s.jpg").c_str());
-
 
     vector<std::string> faces
             {
@@ -407,10 +393,8 @@ int main()
     Model sladModel(FileSystem::getPath("resources/objects/sled/sled.obj"));
     Model clockModel(FileSystem::getPath("resources/objects/sat/sat.obj"));
     Model mrazModel(FileSystem::getPath("resources/objects/dedaMraz/dedaMraz.obj"));
-    Model lightModel(FileSystem::getPath("resources/objects/CenterTable/CenterTable.obj"));
 
     treeModel.SetShaderTextureNamePrefix("material.");
-    lightModel.SetShaderTextureNamePrefix("material.");
     starModel.SetShaderTextureNamePrefix("material.");
     sladModel.SetShaderTextureNamePrefix("material.");
     clockModel.SetShaderTextureNamePrefix("material.");
@@ -427,16 +411,15 @@ int main()
     skyBoxShader.use();
     skyBoxShader.setInt("skybox", 0);
 
-
     // render loop
-    // -----------
+
     while (!glfwWindowShouldClose(window))
     {
-        // input
+
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        // -----
+
         processInput(window);
 
         if(camera.Position.y<-1.0f) {
@@ -450,14 +433,11 @@ int main()
         if(camera.Position.x>7){
             camera.Position.x=7.0f;
         }
-        // render
-        // ------
+
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         spotlight.ind=ind;
-
-        // bind textures on corresponding texture units
 
         ourShader.use();
 
@@ -478,44 +458,30 @@ int main()
         ourShader.setVec3("pointLight.diffuse",pointLight.diffuse);
         ourShader.setVec3("pointLight.specular",pointLight.specular);
         ourShader.setFloat("material.shininess",64.0f);
-
-
         ourShader.setFloat("pointLight.constant",pointLight.constant);
         ourShader.setFloat("pointLight.linear",pointLight.linear);
         ourShader.setFloat("pointLight.quadratic",pointLight.quadratic);
 
         ourShader.setVec3("viewPosition",camera.Position);
 
-        ourShader.setVec3("spotLights[0].position",spotlight.position);
-        ourShader.setVec3("spotLights[0].direction", spotlight.direction);
-        ourShader.setVec3("spotLights[0].ambient", glm::vec3(0.2f*sin(glfwGetTime()*5.0f), 0.5f*sin(glfwGetTime()*2.0f), 0.2f));
-        ourShader.setVec3("spotLights[0].diffuse", glm::vec3(0.2f*sin(glfwGetTime()*5.0f), 0.5f*sin(glfwGetTime()*2.0f), 0.2f));
-        ourShader.setVec3("spotLights[0].specular", glm::vec3(0.2f*sin(glfwGetTime()*5.0f), 0.5f*sin(glfwGetTime()*2.0f), 0.2f));
-        ourShader.setFloat("spotLights[0].constant", spotlight.constant);
-        ourShader.setFloat("spotLights[0].linear", spotlight.linear);
-        ourShader.setFloat("spotLights[0].quadratic", spotlight.quadratic);
-        ourShader.setFloat("spotLights[0].cutOff", spotlight.cutOff);
-        ourShader.setFloat("spotLights[0].outerCutOff",spotlight.outerCutOff);
-        ourShader.setFloat("spotLights[0].ind",spotlight.ind);
-
-        ourShader.setVec3("spotLights[1].position",glm::vec3(4.0f,12.0f,-2.0f));
-        ourShader.setVec3("spotLights[1].direction", glm::vec3(3.8,-6.0,0.0));
-        ourShader.setVec3("spotLights[1].ambient",glm::vec3(0.2,0.2,0.2));
-        ourShader.setVec3("spotLights[1].diffuse",glm::vec3(0.2,0.5,0.7));
-        ourShader.setVec3("spotLights[1].specular",glm::vec3(0.7,0.7,0.7));
-        ourShader.setFloat("spotLights[1].constant", spotlight.constant);
-        ourShader.setFloat("spotLights[1].linear", spotlight.linear);
-        ourShader.setFloat("spotLights[1].quadratic", spotlight.quadratic);
-        ourShader.setFloat("spotLights[1].cutOff", spotlight.cutOff);
-        ourShader.setFloat("spotLights[1].outerCutOff",spotlight.outerCutOff);
-        ourShader.setFloat("spotLights[1].ind",spotlight.ind);
+        ourShader.setVec3("spotLight.position",spotlight.position);
+        ourShader.setVec3("spotLight.direction", spotlight.direction);
+        ourShader.setVec3("spotLight.ambient", glm::vec3(0.2f*sin(glfwGetTime()*5.0f), 0.5f*sin(glfwGetTime()*2.0f), 0.2f));
+        ourShader.setVec3("spotLight.diffuse", glm::vec3(0.2f*sin(glfwGetTime()*5.0f), 0.5f*sin(glfwGetTime()*2.0f), 0.2f));
+        ourShader.setVec3("spotLight.specular", glm::vec3(0.2f*sin(glfwGetTime()*5.0f), 0.5f*sin(glfwGetTime()*2.0f), 0.2f));
+        ourShader.setFloat("spotLight.constant", spotlight.constant);
+        ourShader.setFloat("spotLight.linear", spotlight.linear);
+        ourShader.setFloat("spotLight.quadratic", spotlight.quadratic);
+        ourShader.setFloat("spotLight.cutOff", spotlight.cutOff);
+        ourShader.setFloat("spotLight.outerCutOff",spotlight.outerCutOff);
+        ourShader.setFloat("spotLight.ind",spotlight.ind);
 
         //tree
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model,glm::vec3(glm::vec3(0.0f,-1.0f,0.0f)));
-        model =glm::rotate(model,glm::radians(-90.0f),glm::vec3(1.0f, 0.0f, 0.0f));
-        model =glm::scale(model,glm::vec3(0.05f,0.05f,0.05f));
+        model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::scale(model,glm::vec3(0.05f,0.05f,0.05f));
         ourShader.setMat4("model", model);
         treeModel.Draw(ourShader);
 
@@ -525,23 +491,12 @@ int main()
         glActiveTexture(GL_TEXTURE12);
         glBindTexture(GL_TEXTURE_2D,slad);
 
-
         model = glm::mat4(1.0f);
-        if(smer==1) {
-            model = glm::translate(model, -glm::vec3(0.0f + sin(glfwGetTime()) * 5.0f, 1.5f,
+        model = glm::translate(model, -glm::vec3(0.0f + sin(glfwGetTime()) * 5.0f, 1.5f,
                                                      0.0f + cos(glfwGetTime()) * 5.0f));
-            model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-            model = glm::rotate(model, (float) glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-        }
-        else{
-            model = glm::translate(model, -glm::vec3(0.0f + cos(glfwGetTime()) * 5.0f, 1.5f,
-                                                     0.0f + sin(glfwGetTime()) * 5.0f));
-            model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-            model = glm::rotate(model, (float) -glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-            model=glm::rotate(model,(float)glm::radians(-90.f),glm::vec3(0.0,0.0,1.0));
-        }
-        model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
-        model =glm::scale(model,glm::vec3(0.15f,0.15f,0.15f));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, (float) glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::scale(model,glm::vec3(0.015f,0.015f,0.015f));
         ourShader.setMat4("model", model);
         sladModel.Draw(ourShader);
 
@@ -552,7 +507,7 @@ int main()
         glBindTexture(GL_TEXTURE_2D,star);
         model = glm::mat4(1.0f);
         model = glm::translate(model,glm::vec3(-0.05f,7.5f,0.0f));
-        model =glm::rotate(model,glm::radians(-90.0f),glm::vec3(-1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(-1.0f, 0.0f, 0.0f));
         model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
         ourShader.setMat4("model", model);
         starModel.Draw(ourShader);
@@ -561,17 +516,16 @@ int main()
 
         model = glm::mat4(1.0f);
         model = glm::translate(model,glm::vec3(7.8f,6.0f,-2.0f));
-        model =glm::rotate(model,glm::radians(-90.0f),glm::vec3(0.0f, 1.0f, .0f));
+        model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(0.0f, 1.0f, .0f));
         model = glm::scale(model, glm::vec3(0.045f, 0.045f, 0.045f));
         ourShader.setMat4("model", model);
         clockModel.Draw(ourShader);
 
-
-        //deda Mraz
+        //santa
 
         model = glm::mat4(1.0f);
         model = glm::translate(model,glm::vec3(-4.5f,-1.5f,-5.0f));
-        model=glm::rotate(model,glm::radians(-90.0f),glm::vec3(1.0f,0.0f,0.0f));
+        model = glm::rotate(model,glm::radians(-90.0f),glm::vec3(1.0f,0.0f,0.0f));
         model = glm::scale(model, glm::vec3(0.03f, 0.03f, 0.03f));
         ourShader.setMat4("model", model);
         mrazModel.Draw(ourShader);
@@ -582,7 +536,6 @@ int main()
 
         projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         view = camera.GetViewMatrix();
-
         windowShader.setMat4("projection", projection);
         windowShader.setMat4("view", view);
 
@@ -596,10 +549,7 @@ int main()
         glBindTexture(GL_TEXTURE_2D, window1);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
-        // we now draw as many light bulbs as we have point lights.
-
         roomShader.use();
-
         roomShader.setVec3("viewPos",camera.Position);
         roomShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
         roomShader.setVec3("dirLight.ambient", 0.25f, 0.25f, 0.2f);
@@ -615,50 +565,30 @@ int main()
         roomShader.setFloat("pointLight.linear",pointLight.linear);
         roomShader.setFloat("pointLight.quadratic",pointLight.quadratic);
 
-
-        roomShader.setVec3("spotLights[0].position",spotlight.position);
-        roomShader.setVec3("spotLights[0].direction", spotlight.direction);
-        roomShader.setVec3("spotLights[0].ambient", glm::vec3(0.2f*sin(glfwGetTime()*5.0f), 0.5f*sin(glfwGetTime()*2.0f), 0.2f));
-        roomShader.setVec3("spotLights[0].diffuse", glm::vec3(0.2f*sin(glfwGetTime()*5.0f), 0.5f*sin(glfwGetTime()*2.0f), 0.2f));
-        roomShader.setVec3("spotLights[0].specular", spotlight.specular);
-        roomShader.setFloat("spotLights[0].constant", spotlight.constant);
-        roomShader.setFloat("spotLights[0].linear", spotlight.linear);
-        roomShader.setFloat("spotLights[0].quadratic", spotlight.quadratic);
-        roomShader.setFloat("spotLights[0].cutOff", spotlight.cutOff);
-        roomShader.setFloat("spotLights[0].outerCutOff", spotlight.outerCutOff);
-        roomShader.setFloat("spotLights[0].ind",spotlight.ind);
-
-        roomShader.setVec3("spotLights[1].position",glm::vec3(4.0f,12.0f,-2.0f));
-        roomShader.setVec3("spotLights[1].direction", glm::vec3(3.8,-6.0,0.0) );
-        roomShader.setVec3("spotLights[1].ambient", glm::vec3(0.2,0.2,0.2));
-        roomShader.setVec3("spotLights[1].diffuse",glm::vec3(0.2,0.5,0.7));
-        roomShader.setVec3("spotLights[1].specular", glm::vec3(0.7,0.7,0.7));
-        roomShader.setFloat("spotLights[1].constant", spotlight.constant);
-        roomShader.setFloat("spotLights[1].linear", spotlight.linear);
-        roomShader.setFloat("spotLights[1].quadratic", spotlight.quadratic);
-        roomShader.setFloat("spotLights[1].cutOff", spotlight.cutOff);
-        roomShader.setFloat("spotLights[1].outerCutOff", spotlight.outerCutOff);
-        roomShader.setFloat("spotLights[1].ind",spotlight.ind);
-
-
+        roomShader.setVec3("spotLight.position",spotlight.position);
+        roomShader.setVec3("spotLight.direction", spotlight.direction);
+        roomShader.setVec3("spotLight.ambient", glm::vec3(0.2f*sin(glfwGetTime()*5.0f), 0.5f*sin(glfwGetTime()*2.0f), 0.2f));
+        roomShader.setVec3("spotLight.diffuse", glm::vec3(0.2f*sin(glfwGetTime()*5.0f), 0.5f*sin(glfwGetTime()*2.0f), 0.2f));
+        roomShader.setVec3("spotLight.specular", spotlight.specular);
+        roomShader.setFloat("spotLight.constant", spotlight.constant);
+        roomShader.setFloat("spotLight.linear", spotlight.linear);
+        roomShader.setFloat("spotLight.quadratic", spotlight.quadratic);
+        roomShader.setFloat("spotLight.cutOff", spotlight.cutOff);
+        roomShader.setFloat("spotLight.outerCutOff", spotlight.outerCutOff);
+        roomShader.setFloat("spotLight.ind",spotlight.ind);
 
         projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         roomShader.setMat4("projection", projection);
         view=camera.GetViewMatrix();
         roomShader.setMat4("view", view);
 
-        // calculate the model matrix for each object and pass it to shader before drawing
-        model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+        model = glm::mat4(1.0f);
         model=glm::translate(model,glm::vec3(0.0f,6.5f,-2.0f));
         model=glm::scale(model,glm::vec3(16.0f));
         roomShader.setMat4("model", model);
 
         glBindVertexArray(roomVAO);
         glDrawArrays(GL_TRIANGLES, 0, 18);
-
-
-        // render boxes
-
 
         boxShader.use();
 
@@ -690,96 +620,87 @@ int main()
         boxShader.setFloat("spotLight.ind",spotlight.ind);
         glBindVertexArray(VAO);
 
-        // create transformations
         projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         boxShader.setMat4("projection", projection);
-
-        // camera/view transformation
         view = camera.GetViewMatrix();
         boxShader.setMat4("view", view);
 
         for (unsigned int i = 0; i < 9; i++)
         {
             int n = i%3+1;
-            // calculate the model matrix for each object and pass it to shader before drawing
             std::string name = "ng";
             name.append(to_string(n));
-
 
             boxShader.setInt("material.texture_diffuse1", 14);
             boxShader.setInt("material.texture_specular1", 15);
 
             if(name == "ng1") {
+
                 glActiveTexture(GL_TEXTURE14);
                 glBindTexture(GL_TEXTURE_2D,ng1);
                 glActiveTexture(GL_TEXTURE15);
                 glBindTexture(GL_TEXTURE_2D,c1spec);
 
             }
+
             if(name == "ng2") {
+
                 glActiveTexture(GL_TEXTURE14);
                 glBindTexture(GL_TEXTURE_2D,ng2);
-
                 glActiveTexture(GL_TEXTURE15);
                 glBindTexture(GL_TEXTURE_2D,c2spec);
 
             }
 
             if(name == "ng3") {
+
                 glActiveTexture(GL_TEXTURE14);
                 glBindTexture(GL_TEXTURE_2D, ng3);
-
                 glActiveTexture(GL_TEXTURE15);
                 glBindTexture(GL_TEXTURE_2D,c3spec);
 
             }
 
-
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i]);
             float angle = 20.0f * i;
-            model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
             model = glm::rotate(model,angle,glm::vec3(0.0f,1.0f,0.0f));
             boxShader.setMat4("model", model);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
-
         }
 
         for (unsigned int i = 10; i < 15; i++) {
-            // calculate the model matrix for each object and pass it to shader before drawing
+
             int n = i%3+1;
-            // calculate the model matrix for each object and pass it to shader before drawing
             std::string name = "ng";
             name.append(to_string(n));
 
-
             boxShader.setInt("material.texture_diffuse1", 14);
-
             boxShader.setInt("material.texture_specular1", 15);
 
-
             if(name == "ng1") {
+
                 glActiveTexture(GL_TEXTURE14);
                 glBindTexture(GL_TEXTURE_2D,ng1);
-
                 glActiveTexture(GL_TEXTURE15);
                 glBindTexture(GL_TEXTURE_2D,c1spec);
 
             }
+
             if(name == "ng2") {
+
                 glActiveTexture(GL_TEXTURE14);
                 glBindTexture(GL_TEXTURE_2D,ng2);
-
                 glActiveTexture(GL_TEXTURE15);
                 glBindTexture(GL_TEXTURE_2D,c2spec);
 
             }
 
             if(name == "ng3") {
+
                 glActiveTexture(GL_TEXTURE14);
                 glBindTexture(GL_TEXTURE_2D, ng3);
-
                 glActiveTexture(GL_TEXTURE15);
                 glBindTexture(GL_TEXTURE_2D,c3spec);
 
@@ -791,9 +712,11 @@ int main()
             model = glm::scale(model, glm::vec3(0.5, 0.3, 0.5));
             model = glm::rotate(model,angle,glm::vec3(0.0f,1.0f,0.0f));
             boxShader.setMat4("model", model);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
 
+            glDrawArrays(GL_TRIANGLES, 0, 36);
         }
+
+        //base
 
         boxShader.setInt("material.texture_diffuse1", 16);
         glActiveTexture(GL_TEXTURE16);
@@ -805,12 +728,11 @@ int main()
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
-        glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+        glDepthFunc(GL_LEQUAL);
         skyBoxShader.use();
-        view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
+        view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
         skyBoxShader.setMat4("view", view);
         skyBoxShader.setMat4("projection", projection);
-        // skybox cube
         glBindVertexArray(skyboxVAO);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
@@ -818,13 +740,11 @@ int main()
         glBindVertexArray(0);
         glDepthFunc(GL_LESS);
 
-
         lightCube.use();
         lightCube.setMat4("projection", projection);
         view=camera.GetViewMatrix();
         lightCube.setMat4("view", view);
 
-        // we now draw as many light bulbs as we have point lights.
         model = glm::mat4(1.0f);
         model = glm::translate(model, pointLight.position);
         model = glm::scale(model, glm::vec3(0.6f)); // Make it a smaller cube
@@ -833,10 +753,8 @@ int main()
         glBindVertexArray(cubeVAO);
         glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
 
-
         //malo svetlo
-        lightCube.setMat4("projection", projection);
-        lightCube.setMat4("view", view);
+
         model = glm::mat4(1.0f);
         model = glm::translate(model, spotlight.position);
         model = glm::rotate(model,glm::radians(45.0f),glm::vec3(1.0,0.0,0.0));
@@ -848,13 +766,11 @@ int main()
         glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
     // optional: de-allocate all resources once they've outlived their purpose:
-    // ------------------------------------------------------------------------
     glDeleteVertexArrays(1, &VAO);
     glDeleteVertexArrays(1,&transparentVAO);
     glDeleteVertexArrays(1,&cubeVAO);
@@ -865,8 +781,8 @@ int main()
     glDeleteBuffers(1,&cubeVBO);
     glDeleteBuffers(1,&roomVBO);
     glDeleteBuffers(1,&skyboxVBO);
+
     // glfw: terminate, clearing all previously allocated GLFW resources.
-    // ------------------------------------------------------------------
     glfwTerminate();
     return 0;
 }
@@ -887,25 +803,16 @@ void processInput(GLFWwindow *window) {
         camera.ProcessKeyboard(RIGHT, deltaTime);
 
     if(glfwGetKey(window,GLFW_KEY_1)==GLFW_PRESS){
-       smer=1;
-    }
-    if(glfwGetKey(window,GLFW_KEY_2)==GLFW_PRESS){
-        smer=0;
-    }
-    if(glfwGetKey(window,GLFW_KEY_3)==GLFW_PRESS){
         ind=0.0f;
     }
-    if(glfwGetKey(window,GLFW_KEY_4)==GLFW_PRESS){
+    if(glfwGetKey(window,GLFW_KEY_2)==GLFW_PRESS){
         ind=1.0f;
     }
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    // make sure the viewport matches the new window dimensions; note that width and
-    // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
 
